@@ -4,26 +4,8 @@ public class StringCalc3 {
     public static void main(String[] args) throws Exception {
         Scanner scn = new Scanner(System.in);
         String exp = scn.nextLine();
-
-        // Проверка длины строки
-        if (exp.length() > 10) {
-            throw new Exception("Строка не должна быть длиннее 10 символов");
-        }
-
         char action = getAction(exp);
         String[] data = getData(exp, action);
-
-        // Проверка корректности чисел
-        for (int i = 0; i < data.length; i++) {
-            try {
-                int num = Integer.parseInt(data[i].trim());
-                if (num < 1 || num > 10) {
-                    throw new Exception("Числа должны быть от 1 до 10 включительно");
-                }
-            } catch (NumberFormatException e) {
-                throw new Exception("Некорректные числа");
-            }
-        }
 
         if (action == '*' || action == '/') {
             validateMultiplicationOrDivision(data[1]);
@@ -79,15 +61,25 @@ public class StringCalc3 {
         }
     }
 
+
     static String calculateResult(char action, String[] data) throws Exception {
         String result = "";
+        if (data[0].length() > 10)
+            throw new Exception("Введено больше 10 символов");
+        if (data[1].length() > 10)
+            throw new Exception("Введено больше 10 символов");
         switch (action) {
             case '+':
                 result = data[0] + data[1];
                 break;
             case '*':
-                int multiplier = Integer.parseInt(data[1]);
-                for (int i = 0; i < multiplier; i++) {
+                int multi = Integer.parseInt(data[1]);
+                if (multi > 10 )
+                    throw new Exception("Числа должны быть от 1 до 10 включительно");
+                if (multi < 1 )
+                    throw new Exception("Числа должны быть от 1 до 10 включительно");
+
+                for (int i = 0; i < multi; i++) {
                     result += data[0];
                 }
                 break;
@@ -101,6 +93,10 @@ public class StringCalc3 {
                 break;
             case '/':
                 int newLen = data[0].length() / Integer.parseInt(data[1]);
+                if (newLen > 10 )
+                    throw new Exception("Числа должны быть от 1 до 10 включительно");
+                if (newLen < 1 )
+                    throw new Exception("Числа должны быть от 1 до 10 включительно");
                 result = data[0].substring(0, newLen);
                 break;
         }
